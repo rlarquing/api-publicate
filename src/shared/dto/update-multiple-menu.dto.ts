@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, IsNumber, IsOptional } from 'class-validator';
+import { IsNotEmpty, IsString, IsOptional } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { TipoMenuTypeEnum } from '../enum';
 
@@ -31,7 +31,6 @@ export class UpdateMultipleMenuDto {
   to: string;
 
   @IsOptional()
-  @IsNumber({}, { message: 'El atributo menu debe ser un número' })
   @ApiPropertyOptional({
     description: 'Menu padre al cual pertenece',
     example: 'f49e75f2-4359-4276-a148-3c10c5aae7fd',

@@ -6,7 +6,7 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 export class UpdateMultipleRolDto {
   @IsNotEmpty()
   @ApiProperty({ description: 'id del rol.', example: 'f49e75f2-4359-4276-a148-3c10c5aae7fd' })
@@ -33,7 +33,7 @@ export class UpdateMultipleRolDto {
 
   @IsArray()
   @IsOptional()
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: 'Usuarios que tienen este rol.',
     example: ['f49e75f2-4359-4276-a148-3c10c5aae7fd', 'f49e75f2-4359-4276-a148-3c10c5aae7fg'],
   })
@@ -41,6 +41,6 @@ export class UpdateMultipleRolDto {
 
   @IsArray()
   @IsOptional()
-  @ApiProperty({ description: 'Funciones del rol.', example: ['f49e75f2-4359-4276-a148-3c10c5aae7fe', 'f49e75f2-4359-4276-a148-3c10c5aae7fh'] })
+  @ApiPropertyOptional({ description: 'Funciones del rol.', example: ['f49e75f2-4359-4276-a148-3c10c5aae7fe', 'f49e75f2-4359-4276-a148-3c10c5aae7fh'] })
   funcions?: string[];
 }

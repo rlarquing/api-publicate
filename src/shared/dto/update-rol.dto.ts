@@ -6,7 +6,7 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 export class UpdateRolDto {
   @IsNotEmpty()
   @IsString()
@@ -29,7 +29,7 @@ export class UpdateRolDto {
 
   @IsArray()
   @IsOptional()
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: 'Usuarios que tienen este rol.',
     example: ['f49e75f2-4359-4276-a148-3c10c5aae7fq', 'f49e75f2-4359-4276-a148-3c10c5aae7ff'],
   })
@@ -37,6 +37,6 @@ export class UpdateRolDto {
 
   @IsArray()
   @IsOptional()
-  @ApiProperty({ description: 'Funciones del rol.', example: ['f49e75f2-4359-4276-a148-3c10c5aae7fy', 'f49e75f2-4359-4276-a148-3c10c5aae7fz'] })
+  @ApiPropertyOptional({ description: 'Funciones del rol.', example: ['f49e75f2-4359-4276-a148-3c10c5aae7fy', 'f49e75f2-4359-4276-a148-3c10c5aae7fz'] })
   functions?: string[];
 }
