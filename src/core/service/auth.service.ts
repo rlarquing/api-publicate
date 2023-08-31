@@ -5,7 +5,7 @@ import * as randomToken from 'rand-token';
 import * as moment from 'moment';
 import {
   FunctionRepository,
-  MenuRepository,
+  MenuRepository, MunicipalityRepository, PlanRepository, ProvinceRepository,
   RolRepository,
   UserRepository,
 } from '../../persistence/repository';
@@ -17,7 +17,14 @@ import {
   SecretDataDto,
   UserDto,
 } from '../../shared/dto';
-import { FunctionEntity, RolEntity, UserEntity } from '../../persistence/entity';
+import {
+  FunctionEntity,
+  MunicipalityEntity,
+  PlanEntity,
+  ProvinceEntity,
+  RolEntity,
+  UserEntity,
+} from '../../persistence/entity';
 import { eliminarDuplicado } from '../../../lib';
 import { IJwtPayload } from '../../shared/interface';
 import { FunctionMapper, MenuMapper, UserMapper } from '../mapper';
@@ -34,11 +41,25 @@ export class AuthService {
     private menuMapper: MenuMapper,
     private jwtService: JwtService,
     private mailService: MailService,
+    private planRepository: PlanRepository,
+    private provinceRepository: ProvinceRepository,
+    private municipalityRepository: MunicipalityRepository,
   ) {}
   async signUp(userDto: UserDto): Promise<ResponseDto> {
     const result = new ResponseDto();
-    const { username, password, email } = userDto;
-    const userEntity: UserEntity = new UserEntity(username, email);
+    const {
+      username,
+      password,
+      email,
+      phone,
+      expire,
+      plan,
+      province,
+      municipality } = userDto;
+    const planEntity: PlanEntity = await this.planRepository.findById(plan);
+    const provinceEntity: ProvinceEntity = await this.provinceRepository.findById(province);
+    const municipalityEntity: MunicipalityEntity = await this.municipalityRepository.findById(plan);
+    const userEntity: UserEntity = new UserEntity(username, email, phone, expire, planEntity, provinceEntity, municipalityEntity);
     userEntity.salt = await genSalt();
     userEntity.password = await AuthService.hashPassword(
       password,

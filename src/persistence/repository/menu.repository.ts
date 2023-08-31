@@ -18,7 +18,7 @@ export class MenuRepository
   }
   async existeNomenclador(nomenclador: string): Promise<boolean> {
     const wheres = {
-      activo: true,
+      active: true,
       nomemclador: nomenclador,
     } as FindOptionsWhere<MenuEntity>;
     const menu: MenuEntity = await this.menuRepository.findOneBy(wheres);

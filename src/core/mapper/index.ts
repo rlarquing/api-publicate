@@ -7,3 +7,4 @@ export { ProvinceMapper } from './province.mapper';
 export { RolMapper } from './rol.mapper';
 export { LogHistoryMapper } from './log-history.mapper';
 export { UserMapper } from './user.mapper';
+export { PlanMapper } from './plan.mapper';

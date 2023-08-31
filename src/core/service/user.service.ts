@@ -32,7 +32,7 @@ export class UserService {
         private userRepository: UserRepository,
         private rolRepository: RolRepository,
         private funcionRepository: FunctionRepository,
-        private trazaService: LogHistoryService,
+        private logHistoryService: LogHistoryService,
         private userMapper: UserMapper,
     ) {
     }
@@ -108,7 +108,7 @@ export class UserService {
 
             delete userEntity.salt;
             delete userEntity.password;
-            await this.trazaService.create(user, userEntity, HISTORY_ACTION.ADD);
+            await this.logHistoryService.create(user, userEntity, HISTORY_ACTION.ADD);
             result.successStatus = true;
             result.message = 'success';
         } catch (error) {
@@ -130,7 +130,7 @@ export class UserService {
             throw new NotFoundException('No existe el user');
         }
         try {
-            foundUser = this.userMapper.dtoToUpdateEntity(updateUserDto, foundUser);
+            foundUser = await this.userMapper.dtoToUpdateEntity(updateUserDto, foundUser);
             const {roles} = updateUserDto;
             let {funcions} = updateUserDto;
             foundUser.roles = await this.rolRepository.findByIds(roles);
@@ -150,7 +150,7 @@ export class UserService {
             await this.userRepository.update(foundUser);
             delete foundUser.salt;
             delete foundUser.password;
-            await this.trazaService.create(user, foundUser, HISTORY_ACTION.MOD);
+            await this.logHistoryService.create(user, foundUser, HISTORY_ACTION.MOD);
             result.successStatus = true;
             result.message = 'success';
         } catch (error) {
@@ -171,7 +171,7 @@ export class UserService {
         const userEntity: UserEntity = await this.userRepository.findById(id);
         delete userEntity.salt;
         delete userEntity.password;
-        await this.trazaService.create(user, userEntity, HISTORY_ACTION.DEL);
+        await this.logHistoryService.create(user, userEntity, HISTORY_ACTION.DEL);
         return await this.userRepository.delete(id);
     }
 
@@ -247,7 +247,7 @@ export class UserService {
             await this.userRepository.update(foundUser);
             delete foundUser.salt;
             delete foundUser.password;
-            await this.trazaService.create(user, foundUser, HISTORY_ACTION.MOD);
+            await this.logHistoryService.create(user, foundUser, HISTORY_ACTION.MOD);
             result.successStatus = true;
             result.message = 'success';
         } catch (error) {
