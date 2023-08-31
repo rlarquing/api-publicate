@@ -10,7 +10,7 @@ import {
   ProvinceService,
   RolService,
   SocketService,
-  TrazaService,
+  LogHistoryService,
   UserService,
 } from './service';
 import {
@@ -21,7 +21,7 @@ import {
   MunicipalityMapper,
   ProvinceMapper,
   RolMapper,
-  TrazaMapper,
+  LogHistoryMapper,
   UserMapper,
 } from './mapper';
 import { LoggerProvider } from './logger/logger.provider';
@@ -29,8 +29,8 @@ import { LoggerProvider } from './logger/logger.provider';
 export const providers = [
   JwtStrategy,
   RefreshStrategy,
-  TrazaService,
-  TrazaMapper,
+  LogHistoryService,
+  LogHistoryMapper,
   LoggerProvider,
   AuthService,
   UserService,

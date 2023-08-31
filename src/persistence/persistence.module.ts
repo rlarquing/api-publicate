@@ -14,7 +14,7 @@ import {
   ProvinceEntity,
   RolEntity,
   TagEntity,
-  TrazaEntity,
+  LogHistoryEntity,
   UserEntity,
 } from './entity';
 import { repository } from './persistence.service';
@@ -27,7 +27,7 @@ import { repository } from './persistence.service';
       MunicipalityEntity,
       ProvinceEntity,
       RolEntity,
-      TrazaEntity,
+      LogHistoryEntity,
       UserEntity,
       PermissionEntity,
       TagEntity,

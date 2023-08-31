@@ -5,5 +5,5 @@ export { MenuMapper } from './menu.mapper';
 export { MunicipalityMapper } from './municipality.mapper';
 export { ProvinceMapper } from './province.mapper';
 export { RolMapper } from './rol.mapper';
-export { TrazaMapper } from './traza.mapper';
+export { LogHistoryMapper } from './log-history.mapper';
 export { UserMapper } from './user.mapper';

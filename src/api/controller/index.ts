@@ -8,5 +8,5 @@ export { MenuController } from './menu.controller';
 export { MunicipalityController } from './municipality.controller';
 export { ProvinceController } from './province.controller';
 export { RolController } from './rol.controller';
-export { TrazaController } from './traza.controller';
+export { LogHistoryController } from './log-history.controller';
 export { UserController } from './user.controller';

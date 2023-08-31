@@ -6,7 +6,7 @@ export { GenericNomenclatorRepository } from './generic-nomenclator.repository';
 export { MunicipalityRepository } from './municipality.repository';
 export { ProvinceRepository } from './province.repository';
 export { RolRepository } from './rol.repository';
-export { TrazaRepository } from './traza.repository';
+export { LogHistoryRepository } from './log-history.repository';
 export { UserRepository } from './user.repository';
 export { BusinessRepository } from './business.repository';
 export { ClientRepository } from './client.repository';

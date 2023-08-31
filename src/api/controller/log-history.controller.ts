@@ -25,26 +25,26 @@ import {
 } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
 import { RolType } from '../../shared/enum';
-import { TrazaService } from '../../core/service';
-import { FiltroDto, ListadoDto, TrazaDto } from '../../shared/dto';
+import { LogHistoryService } from '../../core/service';
+import { FiltroDto, ListadoDto, LogHistoryDto } from '../../shared/dto';
 import { AppConfig } from '../../app.keys';
 import { UserEntity } from '../../persistence/entity';
 
-@ApiTags('Trazas')
-@Controller('traza')
+@ApiTags('Log-histories')
+@Controller('log-history')
 @Roles(RolType.ADMINISTRADOR)
 @UseGuards(AuthGuard('jwt'), RolGuard)
 @ApiBearerAuth()
-export class TrazaController {
+export class LogHistoryController {
   constructor(
-    private trazaService: TrazaService,
+    private logHistoryService: LogHistoryService,
     private configService: ConfigService,
   ) {}
   @Get('/')
-  @ApiOperation({ summary: 'Obtener el listado de las trazas' })
+  @ApiOperation({ summary: 'Obtener el listado del historial de registro' })
   @ApiResponse({
     status: 200,
-    description: 'Listado de las trazas',
+    description: 'Listado del historial de registro',
     type: ListadoDto,
   })
   @ApiNotFoundResponse({
@@ -62,10 +62,10 @@ export class TrazaController {
   ): Promise<any> {
     limit = limit > 100 ? 100 : limit;
     const url = this.configService.get(AppConfig.URL);
-    const data = await this.trazaService.findAll({
+    const data = await this.logHistoryService.findAll({
       page,
       limit,
-      route: url + '/api/traza',
+      route: url + '/api/log-history',
     });
     const header: string[] = [
       'id',
@@ -79,33 +79,33 @@ export class TrazaController {
     return new ListadoDto(header, key, data);
   }
   @Get('/:id')
-  @ApiOperation({ summary: 'Obtener una traza' })
+  @ApiOperation({ summary: 'Obtener un historial de registro' })
   @ApiResponse({
     status: 200,
-    description: 'Muestra la información de una traza',
-    type: TrazaDto,
+    description: 'Muestra la información de un historial de registro',
+    type: LogHistoryDto,
   })
   @ApiNotFoundResponse({
     status: 404,
-    description: 'Traza no encontrada.',
+    description: 'Historial de registro no encontrado.',
   })
   @ApiResponse({ status: 401, description: 'Sin autorizacion.' })
   @ApiResponse({ status: 403, description: 'Sin autorizacion al recurso.' })
   @ApiResponse({ status: 500, description: 'Error interno del servicor.' })
-  async findById(@Param('id') id: string): Promise<TrazaDto> {
-    return await this.trazaService.findById(id);
+  async findById(@Param('id') id: string): Promise<LogHistoryDto> {
+    return await this.logHistoryService.findById(id);
   }
-  @ApiOperation({ summary: 'Eliminar una traza' })
+  @ApiOperation({ summary: 'Eliminar un historial de registro' })
   @ApiResponse({
     status: 200,
-    description: 'Elimina de una traza',
+    description: 'Elimina de una logHistory',
   })
   @ApiResponse({ status: 401, description: 'Sin autorizacion.' })
   @ApiResponse({ status: 403, description: 'Sin autorizacion al recurso.' })
   @ApiResponse({ status: 500, description: 'Error interno del servicor.' })
   @Delete('/:id')
   async delete(@Param('id') id: string): Promise<DeleteResult> {
-    return await this.trazaService.delete(id);
+    return await this.logHistoryService.delete(id);
   }
   @Post('/filtro/por')
   @ApiOperation({
@@ -116,7 +116,7 @@ export class TrazaController {
     description: 'Filtra por un usuario y parametros que se le puedan pasar',
   })
   @ApiBody({
-    description: 'Estructura para crear el filtrado de la traza.',
+    description: 'Estructura para crear el filtrado de la logHistory.',
     type: FiltroDto,
   })
   @ApiResponse({ status: 401, description: 'Sin autorizacion.' })
@@ -126,6 +126,6 @@ export class TrazaController {
     @GetUser() user: UserEntity,
     @Body() filtroDto: FiltroDto,
   ): Promise<any> {
-    return await this.trazaService.findByFiltrados(user, filtroDto);
+    return await this.logHistoryService.findByFiltrados(user, filtroDto);
   }
 }

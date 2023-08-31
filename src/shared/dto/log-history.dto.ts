@@ -1,8 +1,8 @@
 import { IsDate, IsNotEmpty, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { HISTORY_ACTION } from '../../persistence/entity/traza.entity';
+import { HISTORY_ACTION } from '../../persistence/entity/log-history.entity';
 
-export class TrazaDto {
+export class LogHistoryDto {
   @IsString()
   @ApiProperty({ description: 'id de la traza.', example: 'f49e75f2-4359-4276-a148-3c10c5aae7fd' })
   id: string;

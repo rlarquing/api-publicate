@@ -7,7 +7,7 @@ export { UserEntity } from './user.entity';
 export { MunicipalityEntity } from './municipality.entity';
 export { ProvinceEntity } from './province.entity';
 export { RolEntity } from './rol.entity';
-export { TrazaEntity } from './traza.entity';
+export { LogHistoryEntity } from './log-history.entity';
 export { PermissionEntity } from './permission.entity';
 export { TagEntity } from './tag.entity';
 export { PlanEntity } from './plan.entity';

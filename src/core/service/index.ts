@@ -8,5 +8,5 @@ export { MenuService } from './menu.service';
 export { MunicipalityService } from './municipality.service';
 export { ProvinceService } from './province.service';
 export { RolService } from './rol.service';
-export { TrazaService } from './traza.service';
+export { LogHistoryService } from './log-history.service';
 export { UserService } from './user.service';

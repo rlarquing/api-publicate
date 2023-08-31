@@ -2,7 +2,7 @@ import { DeleteResult } from 'typeorm';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { IService } from '../../shared/interface';
 import { GenericRepository } from '../../persistence/repository';
-import { TrazaService } from './traza.service';
+import { LogHistoryService } from './log-history.service';
 import {
   BuscarDto,
   FiltroGenericoDto,
@@ -10,7 +10,7 @@ import {
   SelectDto,
 } from '../../shared/dto';
 import { UserEntity } from '../../persistence/entity';
-import { HISTORY_ACTION } from '../../persistence/entity/traza.entity';
+import { HISTORY_ACTION } from '../../persistence/entity/log-history.entity';
 import { ConfigService } from '@nestjs/config';
 import { AppConfig } from '../../app.keys';
 import { IPaginationOptions, Pagination } from 'nestjs-typeorm-paginate';
@@ -21,8 +21,8 @@ export abstract class GenericService<ENTITY> implements IService {
     protected configService: ConfigService,
     protected genericRepository: GenericRepository<ENTITY>,
     protected mapper: any,
-    protected trazaService: TrazaService,
-    protected traza?: boolean,
+    protected logHistoryService: LogHistoryService,
+    protected logHistory?: boolean,
   ) {
     this.isProductionEnv =
       this.configService.get(AppConfig.NODE_ENV) === 'production';
@@ -100,8 +100,8 @@ export abstract class GenericService<ENTITY> implements IService {
     const newEntity = await this.mapper.dtoToEntity(createDto);
     try {
       const objEntity: any = await this.genericRepository.create(newEntity);
-      if (this.traza && this.isProductionEnv) {
-        await this.trazaService.create(user, objEntity, HISTORY_ACTION.ADD);
+      if (this.logHistory && this.isProductionEnv) {
+        await this.logHistoryService.create(user, objEntity, HISTORY_ACTION.ADD);
       }
       result.id = objEntity.id;
       result.successStatus = true;
@@ -172,8 +172,8 @@ export abstract class GenericService<ENTITY> implements IService {
     );
     try {
       await this.genericRepository.update(updateEntity);
-      if (this.traza && this.isProductionEnv) {
-        await this.trazaService.create(user, updateEntity, HISTORY_ACTION.MOD);
+      if (this.logHistory && this.isProductionEnv) {
+        await this.logHistoryService.create(user, updateEntity, HISTORY_ACTION.MOD);
       }
       result.successStatus = true;
       result.message = 'success';
@@ -190,8 +190,8 @@ export abstract class GenericService<ENTITY> implements IService {
     try {
       for (const id of ids) {
         const objEntity: ENTITY = await this.genericRepository.findById(id);
-        if (this.traza && this.isProductionEnv) {
-          await this.trazaService.create(user, objEntity, HISTORY_ACTION.DEL);
+        if (this.logHistory && this.isProductionEnv) {
+          await this.logHistoryService.create(user, objEntity, HISTORY_ACTION.DEL);
         }
         await this.genericRepository.delete(id);
       }
@@ -211,8 +211,8 @@ export abstract class GenericService<ENTITY> implements IService {
       if (!objEntity) {
         throw new NotFoundException('No existe');
       }
-      if (this.traza && this.isProductionEnv) {
-        await this.trazaService.create(user, objEntity, HISTORY_ACTION.REM);
+      if (this.logHistory && this.isProductionEnv) {
+        await this.logHistoryService.create(user, objEntity, HISTORY_ACTION.REM);
       }
     }
     return await this.genericRepository.remove(ids);

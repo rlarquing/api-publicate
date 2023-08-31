@@ -16,11 +16,11 @@ export enum HISTORY_ACTION {
   REM = 'Eliminar_completamente',
 }
 
-@Entity('traza', {
+@Entity('log_history', {
   schema: SchemaEnum.MOD_AUTH,
   orderBy: { id: 'ASC' },
 })
-export class TrazaEntity {
+export class LogHistoryEntity {
   @PrimaryGeneratedColumn ('uuid')
   id: string;
 
@@ -40,6 +40,9 @@ export class TrazaEntity {
   @Column()
   action: HISTORY_ACTION;
 
-  @Column({ nullable: true })
-  record: number;
+  @Column({  type: 'varchar',
+    length: 255,
+    unique: false,
+    nullable: true })
+  record: string;
 }

@@ -29,7 +29,7 @@ export { ReadNomenclatorDto } from './read-nomenclator.dto';
 export { ReadProvinceDto } from './read-province.dto';
 export { ResponseDto } from './response.dto';
 export { SelectDto } from './select.dto';
-export { TrazaDto } from './traza.dto';
+export { LogHistoryDto } from './log-history.dto';
 export { UpdateMenuDto } from './update-menu.dto';
 export { UpdateMultipleMenuDto } from './update-multiple-menu.dto';
 export { UpdateMultipleNomenclatorDto } from './update-multiple-nomenclator.dto';

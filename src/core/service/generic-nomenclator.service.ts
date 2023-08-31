@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { GenericNomenclatorMapper } from '../mapper';
 import { DeleteResult } from 'typeorm';
 import { GenericNomenclatorRepository } from '../../persistence/repository';
-import { TrazaService } from './traza.service';
+import { LogHistoryService } from './log-history.service';
 import {
   BuscarDto,
   FiltroGenericoDto,
@@ -11,7 +11,7 @@ import {
   SelectDto,
 } from '../../shared/dto';
 import { UserEntity } from '../../persistence/entity';
-import { HISTORY_ACTION } from '../../persistence/entity/traza.entity';
+import { HISTORY_ACTION } from '../../persistence/entity/log-history.entity';
 import { IPaginationOptions, Pagination } from 'nestjs-typeorm-paginate';
 
 @Injectable()
@@ -19,7 +19,7 @@ export class GenericNomenclatorService {
   constructor(
     protected repository: GenericNomenclatorRepository,
     protected mapper: GenericNomenclatorMapper,
-    protected trazaService: TrazaService,
+    protected logHistoryService: LogHistoryService,
   ) {}
 
   async findAll(
@@ -52,7 +52,7 @@ export class GenericNomenclatorService {
     const newEntity = await this.mapper.dtoToEntity(createDto);
     try {
       const objEntity: any = await this.repository.create(name, newEntity);
-      await this.trazaService.create(user, objEntity, HISTORY_ACTION.ADD);
+      await this.logHistoryService.create(user, objEntity, HISTORY_ACTION.ADD);
       result.successStatus = true;
       result.message = 'success';
     } catch (error) {
@@ -137,7 +137,7 @@ export class GenericNomenclatorService {
     );
     try {
       await this.repository.update(name, updateEntity);
-      await this.trazaService.create(user, updateEntity, HISTORY_ACTION.MOD);
+      await this.logHistoryService.create(user, updateEntity, HISTORY_ACTION.MOD);
       result.successStatus = true;
       result.message = 'success';
     } catch (error) {
@@ -160,7 +160,7 @@ export class GenericNomenclatorService {
         if (!objEntity) {
           throw new NotFoundException('No existe');
         }
-        await this.trazaService.create(user, objEntity, HISTORY_ACTION.DEL);
+        await this.logHistoryService.create(user, objEntity, HISTORY_ACTION.DEL);
         await this.repository.delete(name, id);
       }
       result.successStatus = true;
@@ -183,7 +183,7 @@ export class GenericNomenclatorService {
       if (!objEntity) {
         throw new NotFoundException('No existe');
       }
-      await this.trazaService.create(user, objEntity, HISTORY_ACTION.DEL);
+      await this.logHistoryService.create(user, objEntity, HISTORY_ACTION.DEL);
     }
     return await this.repository.remove(name, ids);
   }

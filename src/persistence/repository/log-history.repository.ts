@@ -5,8 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Between, DeleteResult, FindOptionsWhere, Repository } from 'typeorm';
-import { TrazaEntity, UserEntity } from '../entity';
-import { UserRepository } from './user.repository';
+import { LogHistoryEntity, UserEntity } from '../entity';
 import {
   IPaginationOptions,
   paginate,
@@ -14,41 +13,39 @@ import {
 } from 'nestjs-typeorm-paginate';
 
 @Injectable()
-export class TrazaRepository {
+export class LogHistoryRepository {
   constructor(
-    @InjectRepository(TrazaEntity)
-    private trazaRepository: Repository<TrazaEntity>,
-    @InjectRepository(UserEntity)
-    private readonly userRepository: UserRepository,
+    @InjectRepository(LogHistoryEntity)
+    private logHistoryRepository: Repository<LogHistoryEntity>,
   ) {}
 
-  async findAll(options: IPaginationOptions): Promise<Pagination<TrazaEntity>> {
-    return await paginate<TrazaEntity>(this.trazaRepository, options);
+  async findAll(options: IPaginationOptions): Promise<Pagination<LogHistoryEntity>> {
+    return await paginate<LogHistoryEntity>(this.logHistoryRepository, options);
   }
 
-  async findById(id: string): Promise<TrazaEntity> {
+  async findById(id: string): Promise<LogHistoryEntity> {
     if (!id) {
       throw new BadRequestException('id must be sent');
     }
-    const options = { id } as FindOptionsWhere<TrazaEntity>;
-    const traza: TrazaEntity = await this.trazaRepository.findOneBy(options);
-    if (!traza) {
-      throw new NotFoundException('this trazas does not found');
+    const options = { id } as FindOptionsWhere<LogHistoryEntity>;
+    const logHistory: LogHistoryEntity = await this.logHistoryRepository.findOneBy(options);
+    if (!logHistory) {
+      throw new NotFoundException('this logHistorys does not found');
     }
-    return traza;
+    return logHistory;
   }
 
-  async create(trazaEntity: TrazaEntity): Promise<void> {
-    await this.trazaRepository.save(trazaEntity);
+  async create(logHistoryEntity: LogHistoryEntity): Promise<void> {
+    await this.logHistoryRepository.save(logHistoryEntity);
   }
 
   async delete(id: string): Promise<DeleteResult> {
-    const options = { id } as FindOptionsWhere<TrazaEntity>;
-    const trazaExist = await this.trazaRepository.findOneBy(options);
-    if (!trazaExist) {
-      throw new NotFoundException('trazas does not exist');
+    const options = { id } as FindOptionsWhere<LogHistoryEntity>;
+    const logHistoryExist = await this.logHistoryRepository.findOneBy(options);
+    if (!logHistoryExist) {
+      throw new NotFoundException('logHistorys does not exist');
     }
-    return await this.trazaRepository.delete(id);
+    return await this.logHistoryRepository.delete(id);
   }
 
   async findByFiltrados(user: UserEntity, filtro: any): Promise<any> {
@@ -82,7 +79,7 @@ export class TrazaRepository {
 
     const take = filtro.take || 10;
     const page = filtro.page || 1;
-    const [result, total] = await this.trazaRepository.findAndCount({
+    const [result, total] = await this.logHistoryRepository.findAndCount({
       where: wheres,
       relations: ['user'],
       take: page * take,
