@@ -1,0 +1,12 @@
+export { GenericController } from './generic.controller';
+export { SocketController } from './socket.controller';
+export { AuthController } from './auth.controller';
+export { EndPointController } from './end-point.controller';
+export { FunctionController } from './function.controller';
+export { GenericNomenclatorController } from './generic-nomenclator.controller';
+export { MenuController } from './menu.controller';
+export { MunicipalityController } from './municipality.controller';
+export { ProvinceController } from './province.controller';
+export { RolController } from './rol.controller';
+export { TrazaController } from './traza.controller';
+export { UserController } from './user.controller';

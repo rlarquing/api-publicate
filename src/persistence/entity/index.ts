@@ -1,0 +1,16 @@
+export { GenericEntity } from './generic.entity';
+export { MenuEntity } from './menu.entity';
+export { EndPointEntity } from './end-point.entity';
+export { FunctionEntity } from './function.entity';
+export { GenericNomenclatorEntity } from './generic-nomenclator.entity';
+export { UserEntity } from './user.entity';
+export { MunicipalityEntity } from './municipality.entity';
+export { ProvinceEntity } from './province.entity';
+export { RolEntity } from './rol.entity';
+export { TrazaEntity } from './traza.entity';
+export { PermissionEntity } from './permission.entity';
+export { TagEntity } from './tag.entity';
+export { PlanEntity } from './plan.entity';
+export { BusinessEntity } from './business.entity';
+export { ClientEntity } from './client.entity';
+export { ProductEntity } from './product.entity';

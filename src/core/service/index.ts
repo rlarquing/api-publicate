@@ -1,0 +1,12 @@
+export { GenericService } from './generic.service';
+export { GenericNomenclatorService } from './generic-nomenclator.service';
+export { SocketService } from './socket.service';
+export { AuthService } from './auth.service';
+export { EndPointService } from './end-point.service';
+export { FunctionService } from './function.service';
+export { MenuService } from './menu.service';
+export { MunicipalityService } from './municipality.service';
+export { ProvinceService } from './province.service';
+export { RolService } from './rol.service';
+export { TrazaService } from './traza.service';
+export { UserService } from './user.service';

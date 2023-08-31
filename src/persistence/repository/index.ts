@@ -1,0 +1,14 @@
+export { GenericRepository } from './generic.repository';
+export { MenuRepository } from './menu.repository';
+export { EndPointRepository } from './end-point.repository';
+export { FunctionRepository } from './function.repository';
+export { GenericNomenclatorRepository } from './generic-nomenclator.repository';
+export { MunicipalityRepository } from './municipality.repository';
+export { ProvinceRepository } from './province.repository';
+export { RolRepository } from './rol.repository';
+export { TrazaRepository } from './traza.repository';
+export { UserRepository } from './user.repository';
+export { BusinessRepository } from './business.repository';
+export { ClientRepository } from './client.repository';
+export { PlanRepository } from './plan.repository';
+export { ProductRepository } from './product.repository';
