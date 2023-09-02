@@ -6,7 +6,7 @@ import {
   MinLength,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-export class CreatePruductDto {
+export class CreateProductDto {
   @IsNotEmpty()
   @IsString()
   @MinLength(4, {

@@ -25,7 +25,7 @@ export class ProductEntity extends GenericEntity {
   amount: number;
 
   @Column({ type: 'boolean', name: 'home_service',  nullable: false })
-  homeService: number;
+  homeService: boolean;
 
   @ManyToOne(() => BusinessEntity, (business) =>business.products, {
     onDelete: 'CASCADE',
@@ -74,7 +74,9 @@ export class ProductEntity extends GenericEntity {
     },
   })
   tags: TagEntity[];
-  constructor(name: string, description: string, price: number, amount: number, homeService: number, business: BusinessEntity) {
+
+
+  constructor(name: string, description: string, price: number, amount: number, homeService: boolean, business: BusinessEntity, municipalities: MunicipalityEntity[], provincies: ProvinceEntity[], tags: TagEntity[]) {
     super();
     this.name = name;
     this.description = description;
@@ -82,6 +84,9 @@ export class ProductEntity extends GenericEntity {
     this.amount = amount;
     this.homeService = homeService;
     this.business = business;
+    this.municipalities = municipalities;
+    this.provincies = provincies;
+    this.tags = tags;
   }
 
   public toString(): string {

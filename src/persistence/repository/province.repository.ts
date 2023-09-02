@@ -1,7 +1,7 @@
 import { ProvinceEntity } from '../entity';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FindOptionsWhere, Repository } from 'typeorm';
+import { FindManyOptions, FindOptionsWhere, In, Repository } from 'typeorm';
 import {
   IPaginationOptions,
   paginate,
@@ -24,5 +24,12 @@ export class ProvinceRepository {
   async findById(id: string): Promise<ProvinceEntity> {
     const options = { id } as FindOptionsWhere<ProvinceEntity>;
     return await this.provinciaRepository.findOneBy(options);
+  }
+
+  async findByIds(ids: string[]): Promise<ProvinceEntity[]> {
+    const options = {
+      where: { id: In(ids) },
+    } as FindManyOptions;
+    return await this.provinciaRepository.find(options);
   }
 }

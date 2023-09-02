@@ -48,7 +48,7 @@ export { CreateClientDto } from './create-client.dto';
 export { ReadClientDto } from './read-client.dto';
 export { UpdateMultipleClientDto } from './update-multiple-client.dto';
 export { UpdateClientDto } from './update-client.dto';
-export { CreatePruductDto } from './create-pruduct.dto';
+export { CreateProductDto } from './create-product.dto';
 export { ReadProductDto } from './read-product.dto';
 export { UpdateMultipleProductDto } from './update-multiple-product.dto';
 export { UpdateProductDto } from './update-product.dto';

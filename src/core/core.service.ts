@@ -11,7 +11,7 @@ import {
   RolService,
   SocketService,
   LogHistoryService,
-  UserService,
+  UserService, PlanService, BusinessService, ClientService, ProductService,
 } from './service';
 import {
   EndPointMapper,
@@ -23,7 +23,7 @@ import {
   RolMapper,
   LogHistoryMapper,
   UserMapper,
-  PlanMapper
+  PlanMapper, BusinessMapper, ProductMapper, ClientMapper,
 } from './mapper';
 import { LoggerProvider } from './logger/logger.provider';
 
@@ -51,5 +51,12 @@ export const providers = [
   FunctionService,
   MenuService,
   SocketService,
-  PlanMapper
+  PlanMapper,
+  BusinessMapper,
+  ProductMapper,
+  ClientMapper,
+  PlanService,
+  BusinessService,
+  ClientService,
+  ProductService
 ];

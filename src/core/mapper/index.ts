@@ -8,3 +8,6 @@ export { RolMapper } from './rol.mapper';
 export { LogHistoryMapper } from './log-history.mapper';
 export { UserMapper } from './user.mapper';
 export { PlanMapper } from './plan.mapper';
+export { BusinessMapper } from './business.mapper';
+export { ClientMapper } from './client.mapper';
+export { ProductMapper } from './product.mapper';
