@@ -13,13 +13,13 @@ export class BusinessEntity extends GenericEntity {
   @Column({ type: 'varchar', unique: true, length: 255, nullable: false })
   name: string;
 
-  @Column({ type: 'varchar', length: 255, nullable: false })
+  @Column({ type: 'varchar', name: 'address_business', length: 255, nullable: false })
   addressBusiness: string;
 
   @ManyToOne(() => UserEntity, (user) => user.business, {
     onDelete: 'CASCADE',
   })
-  @JoinColumn({ name: 'municipality_id' })
+  @JoinColumn({ name: 'user_id' })
   user: UserEntity;
 
   @OneToMany(() => ProductEntity, (product) => product.business)

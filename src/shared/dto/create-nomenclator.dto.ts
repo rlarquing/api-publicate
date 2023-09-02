@@ -4,13 +4,13 @@ export class CreateNomenclatorDto {
   @IsNotEmpty()
   @IsString()
   @MinLength(4, {
-    message: 'La denominación debe de tener al menos 4 carácteres.',
+    message: 'La descripción debe de tener al menos 4 carácteres.',
   })
   @MaxLength(255, {
-    message: 'La denominación debe tener como máximo 255 carácteres.',
+    message: 'La descripción debe tener como máximo 255 carácteres.',
   })
   @ApiProperty({
-    description: 'Denominación de la alerta.',
+    description: 'Descripción del nomenclador.',
     example: 'Alerta 1',
   })
   name: string;
@@ -18,13 +18,13 @@ export class CreateNomenclatorDto {
   @IsNotEmpty()
   @IsString()
   @MinLength(4, {
-    message: 'La denominación debe de tener al menos 4 carácteres.',
+    message: 'La descripción debe de tener al menos 4 carácteres.',
   })
   @MaxLength(255, {
-    message: 'La denominación debe tener como máximo 255 carácteres.',
+    message: 'La descripción debe tener como máximo 255 carácteres.',
   })
   @ApiProperty({
-    description: 'Denominación de la alerta.',
+    description: 'Descripción del nomenclador.',
     example: 'Alerta 1',
   })
   description: string;

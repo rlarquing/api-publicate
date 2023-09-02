@@ -12,8 +12,8 @@ export class ClientEntity extends GenericEntity {
   @Column({ type: 'varchar', unique: true, length: 255, nullable: false })
   name: string;
 
-  @Column({ type: 'varchar', unique: true, length: 255, nullable: false })
-  lastname: string;
+  @Column({ type: 'varchar', name: 'last_name', unique: true, length: 255, nullable: false })
+  lastName: string;
 
   @Column({ type: 'int4', nullable: false })
   age: number;
@@ -24,19 +24,19 @@ export class ClientEntity extends GenericEntity {
   @Column({ type: 'varchar', unique: true, length: 11, nullable: false })
   ci: string;
 
-  @Column({ type: 'varchar', length: 255, nullable: false })
+  @Column({ type: 'varchar', name: 'address_client', length: 255, nullable: false })
   addressClient: string;
 
-  @ManyToOne(() => UserEntity, (user) => user.business, {
+  @ManyToOne(() => UserEntity, (user) => user.clients, {
     onDelete: 'CASCADE',
   })
-  @JoinColumn({ name: 'municipality_id' })
+  @JoinColumn({ name: 'user_id' })
   user: UserEntity;
 
-  constructor(name: string, lastname: string, age: number, sex: string, ci: string, addressClient: string, user: UserEntity) {
+  constructor(name: string, lastName: string, age: number, sex: string, ci: string, addressClient: string, user: UserEntity) {
     super();
     this.name = name;
-    this.lastname = lastname;
+    this.lastName = lastName;
     this.age = age;
     this.sex = sex;
     this.ci = ci;

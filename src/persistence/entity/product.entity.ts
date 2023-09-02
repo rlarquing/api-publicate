@@ -24,7 +24,7 @@ export class ProductEntity extends GenericEntity {
   @Column({ type: 'int4', nullable: false })
   amount: number;
 
-  @Column({ type: 'boolean', nullable: false })
+  @Column({ type: 'boolean', name: 'home_service',  nullable: false })
   homeService: number;
 
   @ManyToOne(() => BusinessEntity, (business) =>business.products, {
