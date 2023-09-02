@@ -99,7 +99,7 @@ export class RolController extends GenericController<RolEntity> {
   @ApiResponse({ status: 401, description: 'Sin autorizacion.' })
   @ApiResponse({ status: 403, description: 'Sin autorizacion al recurso.' })
   @ApiResponse({ status: 500, description: 'Error interno del servidor.' })
-  async findById(@Param('id', ParseIntPipe) id: number): Promise<ReadRolDto> {
+  async findById(@Param('id') id: string): Promise<ReadRolDto> {
     return await super.findById(id);
   }
   @Post('/elementos/multiples')
@@ -122,7 +122,7 @@ export class RolController extends GenericController<RolEntity> {
   @ApiResponse({ status: 401, description: 'Sin autorizacion.' })
   @ApiResponse({ status: 403, description: 'Sin autorizacion al recurso.' })
   @ApiResponse({ status: 500, description: 'Error interno del servidor.' })
-  async findByIds(@Body() ids: number[]): Promise<ReadRolDto[]> {
+  async findByIds(@Body() ids: string[]): Promise<ReadRolDto[]> {
     return await super.findByIds(ids);
   }
 

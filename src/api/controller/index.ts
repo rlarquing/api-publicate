@@ -10,3 +10,7 @@ export { ProvinceController } from './province.controller';
 export { RolController } from './rol.controller';
 export { LogHistoryController } from './log-history.controller';
 export { UserController } from './user.controller';
+export { ClientController } from './client.controller';
+export { PlanController } from './plan.controller';
+export { ProductController } from './product.controller';
+export { BusinessController } from './business.controller';

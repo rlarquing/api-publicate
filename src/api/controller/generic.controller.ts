@@ -57,11 +57,11 @@ export abstract class GenericController<ENTITY> implements IController {
     );
   }
   @Get('/:id')
-  async findById(@Param('id', ParseIntPipe) id: number): Promise<any> {
+  async findById(@Param('id', ParseIntPipe) id: string): Promise<any> {
     return await this.service.findById(id);
   }
   @Post('/elementos/multiples')
-  async findByIds(@Body() ids: number[]): Promise<any[]> {
+  async findByIds(@Body() ids: string[]): Promise<any[]> {
     return await this.service.findByIds(ids);
   }
   @Get('/crear/select')

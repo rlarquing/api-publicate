@@ -10,7 +10,7 @@ import {
   RolController,
   SocketController,
   LogHistoryController,
-  UserController,
+  UserController, ClientController, PlanController, BusinessController, ProductController,
 } from './controller';
 import { CoreModule } from '../core/core.module';
 import { SharedModule } from '../shared/shared.module';
@@ -29,6 +29,10 @@ import { SharedModule } from '../shared/shared.module';
     FunctionController,
     MenuController,
     SocketController,
+    ClientController,
+    PlanController,
+    BusinessController,
+    ProductController
   ],
   providers: [],
   exports: [],

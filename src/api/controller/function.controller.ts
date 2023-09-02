@@ -106,7 +106,7 @@ export class FunctionController extends GenericController<FunctionEntity> {
   @ApiResponse({ status: 403, description: 'Sin autorizacion al recurso.' })
   @ApiResponse({ status: 500, description: 'Error interno del servidor.' })
   async findById(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('id') id: string,
   ): Promise<ReadFunctionDto> {
     return await super.findById(id);
   }
@@ -131,7 +131,7 @@ export class FunctionController extends GenericController<FunctionEntity> {
   @ApiResponse({ status: 401, description: 'Sin autorizacion.' })
   @ApiResponse({ status: 403, description: 'Sin autorizacion al recurso.' })
   @ApiResponse({ status: 500, description: 'Error interno del servidor.' })
-  async findByIds(@Body() ids: number[]): Promise<ReadFunctionDto[]> {
+  async findByIds(@Body() ids: string[]): Promise<ReadFunctionDto[]> {
     return await super.findByIds(ids);
   }
   @Get('/crear/select')
