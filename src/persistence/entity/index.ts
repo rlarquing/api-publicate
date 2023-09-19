@@ -14,3 +14,4 @@ export { PlanEntity } from './plan.entity';
 export { BusinessEntity } from './business.entity';
 export { ClientEntity } from './client.entity';
 export { ProductEntity } from './product.entity';
+export { ImageEntity } from './image.entity';

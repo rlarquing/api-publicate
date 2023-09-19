@@ -1,14 +1,19 @@
 import {
   Entity,
   JoinColumn,
-  Column, ManyToOne, ManyToMany, JoinTable,
+  Column,
+  ManyToOne,
+  ManyToMany,
+  JoinTable,
+  OneToMany,
 } from 'typeorm';
 import { SchemaEnum } from '../../database/schema/schema.enum';
 import { GenericEntity } from './generic.entity';
-import {BusinessEntity} from "./business.entity";
-import {MunicipalityEntity} from "./municipality.entity";
-import {ProvinceEntity} from "./province.entity";
-import {TagEntity} from "./tag.entity";
+import { BusinessEntity } from './business.entity';
+import { MunicipalityEntity } from './municipality.entity';
+import { ProvinceEntity } from './province.entity';
+import { TagEntity } from './tag.entity';
+import { ImageEntity } from './image.entity';
 
 @Entity('product', { schema: SchemaEnum.PUBLIC, orderBy: { id: 'ASC' } })
 export class ProductEntity extends GenericEntity {
@@ -24,16 +29,20 @@ export class ProductEntity extends GenericEntity {
   @Column({ type: 'int4', nullable: false })
   amount: number;
 
-  @Column({ type: 'boolean', name: 'home_service',  nullable: false })
+  @Column({ type: 'boolean', name: 'home_service', nullable: false })
   homeService: boolean;
 
-  @ManyToOne(() => BusinessEntity, (business) =>business.products, {
+  @ManyToOne(() => BusinessEntity, (business) => business.products, {
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'business_id' })
   business: BusinessEntity;
 
-  @ManyToMany(() => MunicipalityEntity, (municipality) => municipality.products, { eager: false })
+  @ManyToMany(
+    () => MunicipalityEntity,
+    (municipality) => municipality.products,
+    { eager: false },
+  )
   @JoinTable({
     name: 'product_municipality',
     joinColumn: {
@@ -47,7 +56,9 @@ export class ProductEntity extends GenericEntity {
   })
   municipalities: MunicipalityEntity[];
 
-  @ManyToMany(() => ProvinceEntity, (province) => province.products, { eager: false })
+  @ManyToMany(() => ProvinceEntity, (province) => province.products, {
+    eager: false,
+  })
   @JoinTable({
     name: 'product_province',
     joinColumn: {
@@ -75,8 +86,20 @@ export class ProductEntity extends GenericEntity {
   })
   tags: TagEntity[];
 
+  @OneToMany(() => ImageEntity, (image) => image.product)
+  images: ImageEntity[];
 
-  constructor(name: string, description: string, price: number, amount: number, homeService: boolean, business: BusinessEntity, municipalities: MunicipalityEntity[], provincies: ProvinceEntity[], tags: TagEntity[]) {
+  constructor(
+    name: string,
+    description: string,
+    price: number,
+    amount: number,
+    homeService: boolean,
+    business: BusinessEntity,
+    municipalities: MunicipalityEntity[],
+    provincies: ProvinceEntity[],
+    tags: TagEntity[],
+  ) {
     super();
     this.name = name;
     this.description = description;

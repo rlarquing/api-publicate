@@ -1,14 +1,22 @@
-import {Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany} from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  JoinTable,
+  ManyToMany,
+  ManyToOne,
+  OneToMany,
+} from 'typeorm';
 import { hash } from 'bcryptjs';
 import { RolEntity } from './rol.entity';
 import { FunctionEntity } from './function.entity';
 import { SchemaEnum } from '../../database/schema/schema.enum';
 import { GenericEntity } from './generic.entity';
-import {ProvinceEntity} from "./province.entity";
-import {PlanEntity} from "./plan.entity";
-import {MunicipalityEntity} from "./municipality.entity";
-import {BusinessEntity} from "./business.entity";
-import {ClientEntity} from "./client.entity";
+import { ProvinceEntity } from './province.entity';
+import { PlanEntity } from './plan.entity';
+import { MunicipalityEntity } from './municipality.entity';
+import { BusinessEntity } from './business.entity';
+import { ClientEntity } from './client.entity';
 
 @Entity('user', { schema: SchemaEnum.MOD_AUTH, orderBy: { id: 'ASC' } })
 export class UserEntity extends GenericEntity {
@@ -31,7 +39,9 @@ export class UserEntity extends GenericEntity {
     inverseJoinColumn: { name: 'rol_id', referencedColumnName: 'id' },
   })
   roles: RolEntity[];
-  @ManyToMany(() => FunctionEntity, (funcion) => funcion.users, { eager: false })
+  @ManyToMany(() => FunctionEntity, (funcion) => funcion.users, {
+    eager: false,
+  })
   @JoinTable({
     name: 'user_funcion',
     joinColumn: {
@@ -45,36 +55,48 @@ export class UserEntity extends GenericEntity {
   })
   functions?: FunctionEntity[];
 
-  @Column({ type: 'int4', nullable: false })
-  phone: number;
+  @Column({ type: 'int4', nullable: true })
+  phone?: number;
 
-  @Column({ type: 'date', nullable: false })
-  expire: Date;
+  @Column({ type: 'date', nullable: true })
+  expire?: Date;
 
   @ManyToOne(() => PlanEntity, (plan) => plan.users, {
     onDelete: 'CASCADE',
+    nullable: true,
   })
   @JoinColumn({ name: 'plan_id' })
-  plan: PlanEntity;
+  plan?: PlanEntity;
 
   @ManyToOne(() => ProvinceEntity, (province) => province.users, {
     onDelete: 'CASCADE',
+    nullable: true,
   })
   @JoinColumn({ name: 'province_id' })
-  province: ProvinceEntity;
+  province?: ProvinceEntity;
 
   @ManyToOne(() => MunicipalityEntity, (municipality) => municipality.users, {
     onDelete: 'CASCADE',
+    nullable: true,
   })
   @JoinColumn({ name: 'municipality_id' })
-  municipality: MunicipalityEntity;
+  municipality?: MunicipalityEntity;
 
   @OneToMany(() => BusinessEntity, (business) => business.user)
   business: BusinessEntity[];
 
   @OneToMany(() => ClientEntity, (client) => client.user)
   clients: ClientEntity[];
-  constructor(username: string, email: string, phone: number, expire: Date, plan: PlanEntity, province: ProvinceEntity, municipality: MunicipalityEntity, functions?: FunctionEntity[],) {
+  constructor(
+    username: string,
+    email: string,
+    phone: number,
+    expire?: Date,
+    plan?: PlanEntity,
+    province?: ProvinceEntity,
+    municipality?: MunicipalityEntity,
+    functions?: FunctionEntity[],
+  ) {
     super();
     this.username = username;
     this.email = email;
