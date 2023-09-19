@@ -65,7 +65,7 @@ describe('UserController (e2e)', () => {
       username: 'especialista',
       password: 'Qwerty1234*',
       confirmPassword: 'Qwerty1234*',
-      roles: [1],
+      roles: ['0c74fa6b-1d2a-449f-971f-dff1d57b977a'],
       funcions: [],
     };
 
@@ -97,7 +97,7 @@ describe('UserController (e2e)', () => {
 
     const updateUserDto: UpdateUserDto = {
       username: 'especialistaEconomico',
-      roles: [1],
+      roles: ['0c74fa6b-1d2a-449f-971f-dff1d57b977a'],
     };
     const listUserRequest = await server
       .get('/api/user')

@@ -18,13 +18,16 @@ export class MunicipalityRepository {
   async findAll(
     options: IPaginationOptions,
   ): Promise<Pagination<MunicipalityEntity>> {
-    return await paginate<MunicipalityEntity>(this.municipioRepository, options);
+    return await paginate<MunicipalityEntity>(
+      this.municipioRepository,
+      options,
+    );
   }
 
   async findById(id: string): Promise<MunicipalityEntity> {
     const options = {
       where: { id },
-      relations: { provincia: true },
+      relations: { province: true },
     } as FindOneOptions<MunicipalityEntity>;
     return await this.municipioRepository.findOne(options);
   }
@@ -33,7 +36,7 @@ export class MunicipalityRepository {
     const options = {
       where: { id: In(ids) },
       relations: {
-        provincia: true,
+        province: true,
       },
     } as FindManyOptions<MunicipalityEntity>;
     return await this.municipioRepository.find(options);

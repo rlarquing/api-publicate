@@ -5,7 +5,10 @@ import * as randomToken from 'rand-token';
 import * as moment from 'moment';
 import {
   FunctionRepository,
-  MenuRepository, MunicipalityRepository, PlanRepository, ProvinceRepository,
+  MenuRepository,
+  MunicipalityRepository,
+  PlanRepository,
+  ProvinceRepository,
   RolRepository,
   UserRepository,
 } from '../../persistence/repository';
@@ -27,7 +30,7 @@ import {
 } from '../../persistence/entity';
 import { eliminarDuplicado } from '../../../lib';
 import { IJwtPayload } from '../../shared/interface';
-import { FunctionMapper, MenuMapper, UserMapper } from '../mapper';
+import { FunctionMapper, MenuMapper } from '../mapper';
 import { MailService } from '../../mail/mail.service';
 
 @Injectable()
@@ -55,11 +58,22 @@ export class AuthService {
       expire,
       plan,
       province,
-      municipality } = userDto;
+      municipality,
+    } = userDto;
     const planEntity: PlanEntity = await this.planRepository.findById(plan);
-    const provinceEntity: ProvinceEntity = await this.provinceRepository.findById(province);
-    const municipalityEntity: MunicipalityEntity = await this.municipalityRepository.findById(plan);
-    const userEntity: UserEntity = new UserEntity(username, email, phone, expire, planEntity, provinceEntity, municipalityEntity);
+    const provinceEntity: ProvinceEntity =
+      await this.provinceRepository.findById(province);
+    const municipalityEntity: MunicipalityEntity =
+      await this.municipalityRepository.findById(municipality);
+    const userEntity: UserEntity = new UserEntity(
+      username,
+      email,
+      phone,
+      expire,
+      planEntity,
+      provinceEntity,
+      municipalityEntity,
+    );
     userEntity.salt = await genSalt();
     userEntity.password = await AuthService.hashPassword(
       password,
@@ -97,7 +111,9 @@ export class AuthService {
     }
     funcions = funcions.concat(funcionsIndiv);
     funcions = eliminarDuplicado(funcions);
-    funcions = await this.funcionRepository.findByIds(funcions.map(item=>item.id));
+    funcions = await this.funcionRepository.findByIds(
+      funcions.map((item) => item.id),
+    );
     const readFuncionDtos: ReadFunctionDto[] = [];
     for (const funcion of funcions) {
       readFuncionDtos.push(await this.funcionMapper.entityToDto(funcion));
