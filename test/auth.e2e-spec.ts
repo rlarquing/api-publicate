@@ -7,6 +7,7 @@ import { AuthCredentialsDto, UserDto } from '../src/shared/dto';
 import { ApiModule } from '../src/api/api.module';
 import { PersistenceModule } from '../src/persistence/persistence.module';
 import { CoreModule } from '../src/core/core.module';
+import moment from 'moment';
 
 describe('AuthController (e2e)', () => {
   let app: INestApplication;
@@ -26,6 +27,12 @@ describe('AuthController (e2e)', () => {
       username: 'reynelbis',
       password: 'Qwerty1234*',
       confirmPassword: 'Qwerty1234*',
+      email: 'juan@camaguey.geocuba.cu',
+      phone: 52037685,
+      expire: moment().add(1, 'months').toDate(),
+      plan: null,
+      province: null,
+      municipality: null,
     };
 
     const newUserRequest = await server

@@ -8,7 +8,10 @@ import { ReadPlanDto } from './read-plan.dto';
 export class ReadUserDto {
   dtoToString: string;
 
-  @ApiProperty({ description: 'id del usuario.', example: 'f49e75f2-4359-4276-a148-3c10c5aae7fd' })
+  @ApiProperty({
+    description: 'id del usuario.',
+    example: 'f49e75f2-4359-4276-a148-3c10c5aae7fd',
+  })
   id: string;
 
   @ApiProperty({ description: 'Nombre del usuario.', example: 'juan' })
@@ -27,15 +30,13 @@ export class ReadUserDto {
     description: 'Funciones del usuario.',
     type: [ReadFunctionDto],
   })
-  funcions: ReadFunctionDto[];
-
+  functions: ReadFunctionDto[];
 
   @ApiProperty({
     description: 'Número de telefono.',
     example: 52037685,
   })
   phone: number;
-
 
   @ApiProperty({
     description: 'fecha de expiracion del usuario',
@@ -47,28 +48,39 @@ export class ReadUserDto {
     description: 'Plan al cual pertenece',
     example: ReadPlanDto,
   })
-  plan: ReadPlanDto;
+  plan: ReadPlanDto | null;
 
   @ApiProperty({
     description: 'Provincia al cual pertenece',
     example: ReadProvinceDto,
   })
-  province: ReadProvinceDto;
+  province: ReadProvinceDto | null;
 
   @ApiProperty({
     description: 'Municipio al cual pertenece',
     example: ReadMunicipalityDto,
   })
-  municipality: ReadMunicipalityDto;
+  municipality: ReadMunicipalityDto | null;
 
-
-  constructor(dtoToString: string, id: string, username: string, email: string, roles: ReadRolDto[], funcions: ReadFunctionDto[], phone: number, expire: Date, plan: ReadPlanDto, province: ReadProvinceDto, municipality: ReadMunicipalityDto) {
+  constructor(
+    dtoToString: string,
+    id: string,
+    username: string,
+    email: string,
+    roles: ReadRolDto[],
+    functions: ReadFunctionDto[],
+    phone: number,
+    expire: Date,
+    plan: ReadPlanDto,
+    province: ReadProvinceDto,
+    municipality: ReadMunicipalityDto,
+  ) {
     this.dtoToString = dtoToString;
     this.id = id;
     this.username = username;
     this.email = email;
     this.roles = roles;
-    this.funcions = funcions;
+    this.functions = functions;
     this.phone = phone;
     this.expire = expire;
     this.plan = plan;

@@ -2,14 +2,26 @@ import { Injectable } from '@nestjs/common';
 import { RolMapper } from './rol.mapper';
 import { FunctionMapper } from './function.mapper';
 import {
-  ReadFunctionDto, ReadMunicipalityDto, ReadPlanDto, ReadProvinceDto,
+  CreateUserDto,
+  ReadFunctionDto,
+  ReadMunicipalityDto,
+  ReadPlanDto,
+  ReadProvinceDto,
   ReadRolDto,
   ReadUserDto,
   UpdateUserDto,
-  UserDto,
 } from '../../shared/dto';
-import { MunicipalityEntity, PlanEntity, ProvinceEntity, UserEntity } from '../../persistence/entity';
-import { MunicipalityRepository, PlanRepository, ProvinceRepository } from '../../persistence/repository';
+import {
+  MunicipalityEntity,
+  PlanEntity,
+  ProvinceEntity,
+  UserEntity,
+} from '../../persistence/entity';
+import {
+  MunicipalityRepository,
+  PlanRepository,
+  ProvinceRepository,
+} from '../../persistence/repository';
 import { PlanMapper } from './plan.mapper';
 import { ProvinceMapper } from './province.mapper';
 import { MunicipalityMapper } from './municipality.mapper';
@@ -26,13 +38,23 @@ export class UserMapper {
     protected provinceMapper: ProvinceMapper,
     protected municipalityMapper: MunicipalityMapper,
   ) {}
-  async dtoToEntity(userDto: UserDto): Promise<UserEntity> {
-    const planEntity: PlanEntity = await this.planRepository.findById(userDto.plan);
-    const provinceEntity: ProvinceEntity = await this.provinceRepository.findById(userDto.province);
-    const municipalityEntity: MunicipalityEntity = await this.municipalityRepository.findById(userDto.municipality);
-    return new UserEntity(userDto.username, userDto.email, userDto.phone, userDto.expire, planEntity,
-    provinceEntity,
-    municipalityEntity,);
+  async dtoToEntity(userDto: CreateUserDto): Promise<UserEntity> {
+    const planEntity: PlanEntity = await this.planRepository.findById(
+      userDto.plan,
+    );
+    const provinceEntity: ProvinceEntity =
+      await this.provinceRepository.findById(userDto.province);
+    const municipalityEntity: MunicipalityEntity =
+      await this.municipalityRepository.findById(userDto.municipality);
+    return new UserEntity(
+      userDto.username,
+      userDto.email,
+      userDto.phone,
+      userDto.expire,
+      planEntity,
+      provinceEntity,
+      municipalityEntity,
+    );
   }
   async dtoToUpdateEntity(
     updateUserDto: UpdateUserDto,
@@ -40,9 +62,13 @@ export class UserMapper {
   ): Promise<UserEntity> {
     updateUserEntity.username = updateUserDto.username;
     updateUserEntity.email = updateUserDto.email;
-    const planEntity: PlanEntity = await this.planRepository.findById(updateUserDto.plan);
-    const provinceEntity: ProvinceEntity = await this.provinceRepository.findById(updateUserDto.province);
-    const municipalityEntity: MunicipalityEntity = await this.municipalityRepository.findById(updateUserDto.municipality);
+    const planEntity: PlanEntity = await this.planRepository.findById(
+      updateUserDto.plan,
+    );
+    const provinceEntity: ProvinceEntity =
+      await this.provinceRepository.findById(updateUserDto.province);
+    const municipalityEntity: MunicipalityEntity =
+      await this.municipalityRepository.findById(updateUserDto.municipality);
     updateUserEntity.plan = planEntity;
     updateUserEntity.province = provinceEntity;
     updateUserEntity.municipality = municipalityEntity;
@@ -60,9 +86,21 @@ export class UserMapper {
     for (const funcion of userEntity.functions) {
       readFuncionDto.push(await this.funcionMapper.entityToDto(funcion));
     }
-    const readPlanDto: ReadPlanDto = await this.planMapper.entityToDto(userEntity.plan)
-    const readProvinceDto: ReadProvinceDto = await this.provinceMapper.entityToDto(userEntity.province)
-    const readMunicipatityDto: ReadMunicipalityDto = await this.municipalityMapper.entityToDto(userEntity.municipality)
+    let readPlanDto: ReadPlanDto = null;
+    if (userEntity.plan) {
+      readPlanDto = await this.planMapper.entityToDto(userEntity.plan);
+    }
+    let readProvinceDto: ReadProvinceDto = null;
+    if (userEntity.province) {
+      readProvinceDto = this.provinceMapper.entityToDto(userEntity.province);
+    }
+    let readMunicipatityDto: ReadMunicipalityDto = null;
+    if (userEntity.municipality) {
+      readMunicipatityDto = await this.municipalityMapper.entityToDto(
+        userEntity.municipality,
+      );
+    }
+
     const dtoToString: string = userEntity.toString();
     return new ReadUserDto(
       dtoToString,
@@ -75,7 +113,7 @@ export class UserMapper {
       userEntity.expire,
       readPlanDto,
       readProvinceDto,
-      readMunicipatityDto
+      readMunicipatityDto,
     );
   }
 }

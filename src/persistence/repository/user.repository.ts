@@ -8,6 +8,7 @@ import { RolEntity, UserEntity } from '../entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
   Between,
+  DeleteResult,
   FindManyOptions,
   FindOneOptions,
   FindOptionsWhere,
@@ -285,5 +286,9 @@ export class UserRepository {
     return await this.userRepository.findOne({
       where: { username: username },
     } as FindOneOptions);
+  }
+
+  async remove(ids: string[]): Promise<DeleteResult> {
+    return await this.userRepository.delete(ids);
   }
 }

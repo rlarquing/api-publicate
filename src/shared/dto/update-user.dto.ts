@@ -1,7 +1,8 @@
 import {
   IsDate,
   IsEmail,
-  IsNotEmpty, IsNumber,
+  IsNotEmpty,
+  IsNumber,
   IsOptional,
   IsString,
   MaxLength,
@@ -31,53 +32,65 @@ export class UpdateUserDto {
   username: string;
 
   @IsNotEmpty()
-  @ApiProperty({ description: 'Roles del usuario.', example: ['f49e75f2-4359-4276-a148-3c10c5aae7fg', 'f49e75f2-4359-4276-a148-3c10c5aae7fd'] })
+  @ApiProperty({
+    description: 'Roles del usuario.',
+    example: [
+      'f49e75f2-4359-4276-a148-3c10c5aae7fg',
+      'f49e75f2-4359-4276-a148-3c10c5aae7fd',
+    ],
+  })
   roles: string[];
 
   @IsOptional()
-  @ApiProperty({ description: 'Funciones del usuario.', example: ['f49e75f2-4359-4276-a148-3c10c5aae7fw', 'f49e75f2-4359-4276-a148-3c10c5aae7fj'] })
-  funcions?: string[];
-
-  @IsNotEmpty()
-  @IsNumber({}, { message: 'El atributo phone debe ser un número' })
   @ApiProperty({
+    description: 'Funciones del usuario.',
+    example: [
+      'f49e75f2-4359-4276-a148-3c10c5aae7fw',
+      'f49e75f2-4359-4276-a148-3c10c5aae7fj',
+    ],
+  })
+  functions?: string[];
+
+  @IsOptional()
+  @IsNumber({}, { message: 'El atributo phone debe ser un número' })
+  @ApiPropertyOptional({
     description: 'Número de telefono.',
     example: 52037685,
   })
-  phone: number;
+  phone?: number;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsDate({
     message: 'El atributo expire debe de ser formato válido',
   })
   @Type(() => Date)
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: 'fecha de expiracion del usuario',
     example: '2023-07-08',
   })
-  expire: Date;
+  expire?: Date;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: 'Plan al cual pertenece',
     example: '471406b8-6e95-4613-99cd-479d1050afff',
   })
-  plan: string;
+  plan?: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: 'Provincia al cual pertenece',
     example: '471406b8-6e95-4613-99cd-479d1050affe',
   })
-  province: string;
+  province?: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: 'Municipio al cual pertenece',
     example: '471406b8-6e95-4613-99cd-479d1050affw',
   })
-  municipality: string;
+  municipality?: string;
 }

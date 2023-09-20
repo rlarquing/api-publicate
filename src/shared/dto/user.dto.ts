@@ -54,53 +54,53 @@ export class UserDto {
   @IsEqualTo('password')
   confirmPassword: string;
 
-  @IsOptional()
-  @ApiPropertyOptional({
+  @IsNotEmpty()
+  @ApiProperty({
     description: 'Email del usuario.',
     example: 'juan@camaguey.geocuba.cu',
   })
-  email?: string;
+  email: string;
 
-  @IsOptional()
+  @IsNotEmpty()
   @IsNumber({}, { message: 'El atributo phone debe ser un número' })
-  @ApiPropertyOptional({
+  @ApiProperty({
     description: 'Número de telefono.',
     example: 52037685,
   })
-  phone?: number;
+  phone: number;
 
-  @IsOptional()
+  @IsNotEmpty()
   @IsDate({
     message: 'El atributo expire debe de ser formato válido',
   })
   @Type(() => Date)
-  @ApiPropertyOptional({
+  @ApiProperty({
     description: 'fecha de expiracion del usuario',
     example: '2023-07-08',
   })
-  expire?: Date;
+  expire: Date;
 
-  @IsOptional()
+  @IsNotEmpty()
   @IsString()
-  @ApiPropertyOptional({
+  @ApiProperty({
     description: 'Plan al cual pertenece',
     example: '471406b8-6e95-4613-99cd-479d1050afff',
   })
-  plan?: string;
+  plan: string;
 
-  @IsOptional()
+  @IsNotEmpty()
   @IsString()
-  @ApiPropertyOptional({
+  @ApiProperty({
     description: 'Provincia al cual pertenece',
     example: '471406b8-6e95-4613-99cd-479d1050affe',
   })
-  province?: string;
+  province: string;
 
-  @IsOptional()
+  @IsNotEmpty()
   @IsString()
-  @ApiPropertyOptional({
+  @ApiProperty({
     description: 'Municipio al cual pertenece',
     example: '471406b8-6e95-4613-99cd-479d1050affw',
   })
-  municipality?: string;
+  municipality: string;
 }

@@ -82,14 +82,14 @@ export abstract class GenericService<ENTITY> implements IService {
   }
 
   async createSelectFilter(
-      filtroGenericoDto: FiltroGenericoDto,
+    filtroGenericoDto: FiltroGenericoDto,
   ): Promise<SelectDto[]> {
     const items: ENTITY[] = await this.genericRepository.createSelectFilter(
-        filtroGenericoDto.clave,
-        filtroGenericoDto.valor,
+      filtroGenericoDto.clave,
+      filtroGenericoDto.valor,
     );
     const selectDto: SelectDto[] = [];
-    for (const item  of items) {
+    for (const item of items) {
       selectDto.push(new SelectDto(item['id'], item.toString()));
     }
     return selectDto;
@@ -101,7 +101,11 @@ export abstract class GenericService<ENTITY> implements IService {
     try {
       const objEntity: any = await this.genericRepository.create(newEntity);
       if (this.logHistory && this.isProductionEnv) {
-        await this.logHistoryService.create(user, objEntity, HISTORY_ACTION.ADD);
+        await this.logHistoryService.create(
+          user,
+          objEntity,
+          HISTORY_ACTION.ADD,
+        );
       }
       result.id = objEntity.id;
       result.successStatus = true;
@@ -173,7 +177,11 @@ export abstract class GenericService<ENTITY> implements IService {
     try {
       await this.genericRepository.update(updateEntity);
       if (this.logHistory && this.isProductionEnv) {
-        await this.logHistoryService.create(user, updateEntity, HISTORY_ACTION.MOD);
+        await this.logHistoryService.create(
+          user,
+          updateEntity,
+          HISTORY_ACTION.MOD,
+        );
       }
       result.successStatus = true;
       result.message = 'success';
@@ -191,7 +199,11 @@ export abstract class GenericService<ENTITY> implements IService {
       for (const id of ids) {
         const objEntity: ENTITY = await this.genericRepository.findById(id);
         if (this.logHistory && this.isProductionEnv) {
-          await this.logHistoryService.create(user, objEntity, HISTORY_ACTION.DEL);
+          await this.logHistoryService.create(
+            user,
+            objEntity,
+            HISTORY_ACTION.DEL,
+          );
         }
         await this.genericRepository.delete(id);
       }
@@ -212,7 +224,11 @@ export abstract class GenericService<ENTITY> implements IService {
         throw new NotFoundException('No existe');
       }
       if (this.logHistory && this.isProductionEnv) {
-        await this.logHistoryService.create(user, objEntity, HISTORY_ACTION.REM);
+        await this.logHistoryService.create(
+          user,
+          objEntity,
+          HISTORY_ACTION.REM,
+        );
       }
     }
     return await this.genericRepository.remove(ids);

@@ -66,7 +66,7 @@ describe('UserController (e2e)', () => {
       password: 'Qwerty1234*',
       confirmPassword: 'Qwerty1234*',
       roles: ['0c74fa6b-1d2a-449f-971f-dff1d57b977a'],
-      funcions: [],
+      functions: [],
     };
 
     const newUserRequest = await server
@@ -103,10 +103,10 @@ describe('UserController (e2e)', () => {
       .get('/api/user')
       .set('Authorization', 'Bearer ' + loginUserRequest.body.accessToken)
       .expect(200);
-    const id: number =
-      listUserRequest.body.data.items[
-        listUserRequest.body.data.items.length - 1
-      ].id;
+    const users: any[] = listUserRequest.body.data.items.filter(
+      (item: any) => item.username != 'juan',
+    );
+    const id: string = users[0].id;
     const getUserRequest = await server
       .get(`/api/user/${id}`)
       .set('Authorization', 'Bearer ' + loginUserRequest.body.accessToken)
@@ -139,10 +139,10 @@ describe('UserController (e2e)', () => {
       .get('/api/user')
       .set('Authorization', 'Bearer ' + loginUserRequest.body.accessToken)
       .expect(200);
-    const id: number =
-      listUserRequest.body.data.items[
-        listUserRequest.body.data.items.length - 1
-      ].id;
+    const users: any[] = listUserRequest.body.data.items.filter(
+      (item: any) => item.username != 'juan',
+    );
+    const id: string = users[0].id;
     const getUserRequest = await server
       .get(`/api/user/${id}`)
       .set('Authorization', 'Bearer ' + loginUserRequest.body.accessToken)
@@ -172,10 +172,10 @@ describe('UserController (e2e)', () => {
       .set('Authorization', 'Bearer ' + loginUserRequest.body.accessToken)
       .expect(200);
     expect(listUserRequest.status).toBe(200);
-    const id: number =
-      listUserRequest.body.data.items[
-        listUserRequest.body.data.items.length - 1
-      ].id;
+    const users: any[] = listUserRequest.body.data.items.filter(
+      (item: any) => item.username != 'juan',
+    );
+    const id: string = users[0].id;
     const getUserRequest = await server
       .get(`/api/user/${id}`)
       .set('Authorization', 'Bearer ' + loginUserRequest.body.accessToken)
