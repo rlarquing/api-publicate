@@ -16,14 +16,12 @@ export const env = (name: string, default_value?) => {
     console.error(`Missing environment variable: "${name}"`);
     process.exit(0);
   }
-
   if (v === 'true') {
     v = true;
   }
   if (v === 'false') {
     v = false;
   }
-
   return v ?? default_value;
 };
 export const config = () => ({

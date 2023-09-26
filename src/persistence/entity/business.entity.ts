@@ -1,19 +1,20 @@
-import {
-  Entity,
-  JoinColumn,
-  Column, ManyToOne, OneToMany,
-} from 'typeorm';
+import { Entity, JoinColumn, Column, ManyToOne, OneToMany } from 'typeorm';
 import { UserEntity } from './user.entity';
 import { SchemaEnum } from '../../database/schema/schema.enum';
 import { GenericEntity } from './generic.entity';
-import {ProductEntity} from "./product.entity";
+import { ProductEntity } from './product.entity';
 
 @Entity('business', { schema: SchemaEnum.PUBLIC, orderBy: { id: 'ASC' } })
 export class BusinessEntity extends GenericEntity {
   @Column({ type: 'varchar', unique: true, length: 255, nullable: false })
   name: string;
 
-  @Column({ type: 'varchar', name: 'address_business', length: 255, nullable: false })
+  @Column({
+    type: 'varchar',
+    name: 'address_business',
+    length: 255,
+    nullable: false,
+  })
   addressBusiness: string;
 
   @ManyToOne(() => UserEntity, (user) => user.business, {
@@ -24,11 +25,7 @@ export class BusinessEntity extends GenericEntity {
 
   @OneToMany(() => ProductEntity, (product) => product.business)
   products: ProductEntity[];
-  constructor(
-    name: string,
-    addressBusiness: string,
-    user: UserEntity,
-  ) {
+  constructor(name: string, addressBusiness: string, user: UserEntity) {
     super();
     this.name = name;
     this.addressBusiness = addressBusiness;

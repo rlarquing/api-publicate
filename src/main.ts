@@ -42,7 +42,7 @@ async function bootstrap() {
   await app.listen(AppModule.port);
   const isDevelopmentEnv = process.env.NODE_ENV !== 'production';
   if (isDevelopmentEnv) {
-    const application = await app;
+    const application = app;
     const endPointService = application.get(EndPointService);
     const rolService: RolService = application.get(RolService);
     const menuService = application.get(MenuService);
