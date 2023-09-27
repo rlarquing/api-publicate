@@ -99,7 +99,16 @@ export class UserRepository {
   }
 
   async create(userEntity: UserEntity): Promise<UserEntity> {
-    return await this.userRepository.save(userEntity);
+    try {
+      return await this.userRepository.save(userEntity);
+    } catch (e) {
+      if (e.code === 'ER_DUP_ENTRY') {
+        throw new ConflictException(
+          'El email o el usuario ya ha sido registrado',
+        );
+      }
+      throw new InternalServerErrorException();
+    }
   }
 
   async update(updatedUser: UserEntity): Promise<ResponseDto> {
@@ -290,5 +299,19 @@ export class UserRepository {
 
   async remove(ids: string[]): Promise<DeleteResult> {
     return await this.userRepository.delete(ids);
+  }
+
+  async activateUser(user: UserEntity): Promise<void> {
+    user.active = true;
+    await this.userRepository.save(user);
+  }
+
+  async findOneInactiveByIdAndCodeActivation(
+    id: string,
+    code: number,
+  ): Promise<UserEntity> {
+    return this.userRepository.findOne({
+      where: { id: id, codeActivation: code, active: false },
+    } as FindOneOptions);
   }
 }

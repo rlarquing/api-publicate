@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  UnauthorizedException,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { genSalt, hash } from 'bcryptjs';
 import * as randomToken from 'rand-token';
@@ -13,6 +17,7 @@ import {
   UserRepository,
 } from '../../persistence/repository';
 import {
+  ActivateUserDto,
   AuthCredentialsDto,
   ReadFunctionDto,
   ReadMenuDto,
@@ -192,5 +197,19 @@ export class AuthService {
     result.successStatus = true;
     result.message = 'success';
     return result;
+  }
+
+  async activateUser(activateUserDto: ActivateUserDto): Promise<void> {
+    const { id, code } = activateUserDto;
+    const user: UserEntity =
+      await this.userRepository.findOneInactiveByIdAndCodeActivation(id, code);
+
+    if (!user) {
+      throw new UnprocessableEntityException(
+        'La cuenta del usuario no se pudo activar',
+      );
+    }
+
+    await this.userRepository.activateUser(user);
   }
 }

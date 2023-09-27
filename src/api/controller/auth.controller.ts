@@ -4,6 +4,8 @@ import {
   Post,
   ValidationPipe,
   UseGuards,
+  Get,
+  Query,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -18,6 +20,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from '../decorator';
 import { AuthService } from '../../core/service';
 import {
+  ActivateUserDto,
   AuthCredentialsDto,
   RefreshTokenDto,
   ResponseDto,
@@ -41,7 +44,6 @@ export class AuthController {
     description: 'Estructura para crear el usuario.',
     type: UserDto,
   })
-  @ApiExcludeEndpoint()
   async signUp(@Body(ValidationPipe) userDto: UserDto): Promise<ResponseDto> {
     return await this.authService.signUp(userDto);
   }
@@ -98,5 +100,17 @@ export class AuthController {
   @UseGuards(AuthGuard('jwt'))
   async logout(@GetUser() user: UserEntity): Promise<ResponseDto> {
     return await this.authService.logout(user);
+  }
+
+  @Get('/activate-account')
+  @ApiOperation({ summary: 'Activar cuenta de usuario' })
+  @ApiResponse({
+    status: 200,
+    description: 'Activar la cuenta de un usuario',
+    type: ResponseDto,
+  })
+  @ApiResponse({ status: 500, description: 'Error interno del servidor.' })
+  activateAccount(@Query() activateUserDto: ActivateUserDto): Promise<void> {
+    return this.authService.activateUser(activateUserDto);
   }
 }

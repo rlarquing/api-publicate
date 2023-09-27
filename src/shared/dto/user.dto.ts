@@ -1,14 +1,14 @@
 import {
   IsDate,
+  IsEmail,
   IsNotEmpty,
   IsNumber,
-  IsOptional,
   IsString,
   Matches,
   MaxLength,
   MinLength,
 } from 'class-validator';
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 import { IsEqualTo } from '../../api/decorator';
 import { Type } from 'class-transformer';
 
@@ -55,6 +55,7 @@ export class UserDto {
   confirmPassword: string;
 
   @IsNotEmpty()
+  @IsEmail()
   @ApiProperty({
     description: 'Email del usuario.',
     example: 'juan@camaguey.geocuba.cu',

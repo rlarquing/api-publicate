@@ -1,4 +1,6 @@
 import {
+  AfterInsert,
+  AfterUpdate,
   Column,
   Entity,
   JoinColumn,
@@ -22,7 +24,7 @@ import { ClientEntity } from './client.entity';
 export class UserEntity extends GenericEntity {
   @Column({ type: 'varchar', unique: true, length: 25, nullable: false })
   username: string;
-  @Column({ type: 'varchar', nullable: true })
+  @Column({ type: 'varchar', nullable: true, unique: true })
   email: string;
   @Column({ type: 'varchar', nullable: false })
   password: string;
@@ -85,6 +87,17 @@ export class UserEntity extends GenericEntity {
   @OneToMany(() => BusinessEntity, (business) => business.user)
   business: BusinessEntity[];
 
+  @Column({ type: 'boolean', default: false })
+  active: boolean;
+
+  @Column({
+    type: 'int4',
+    unique: true,
+    name: 'code_activation',
+    nullable: true,
+  })
+  codeActivation?: number;
+
   @OneToMany(() => ClientEntity, (client) => client.user)
   clients: ClientEntity[];
   constructor(
@@ -112,5 +125,11 @@ export class UserEntity extends GenericEntity {
   }
   public toString(): string {
     return this.username;
+  }
+
+  @AfterInsert()
+  @AfterUpdate()
+  public codigo(): void {
+    this.codeActivation = Math.round(Math.random() * 999999);
   }
 }
