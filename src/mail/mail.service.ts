@@ -10,11 +10,26 @@ export class MailService {
     await this.mailerService.sendMail({
       to: user.email,
       // from: '"Support Team" <support@example.com>', // override default from
-      subject: 'Hola',
+      subject: 'Activación de su cuenta de usuario.',
       template: 'confirmation', // `.hbs` extension is appended automatically
       context: {
         // ✏️ filling curly brackets with content
         name: user.username,
+        code: user.codeActivation,
+      },
+    });
+  }
+
+  async sendRequestResetPassword(user: UserEntity) {
+    await this.mailerService.sendMail({
+      to: user.email,
+      // from: '"Support Team" <support@example.com>', // override default from
+      subject: 'Recuperación de la contraseña de su cuenta de usuario.',
+      template: 'request-password', // `.hbs` extension is appended automatically
+      context: {
+        // ✏️ filling curly brackets with content
+        name: user.username,
+        code: user.resetPasswordCode,
       },
     });
   }

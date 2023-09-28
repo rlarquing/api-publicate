@@ -6,28 +6,34 @@ import {
   UseGuards,
   Get,
   Query,
+  Patch,
+  Param,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiBody,
-  ApiExcludeEndpoint,
   ApiOperation,
   ApiResponse,
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
-import { GetUser } from '../decorator';
+import { GetUser, Roles } from '../decorator';
 import { AuthService } from '../../core/service';
 import {
   ActivateUserDto,
   AuthCredentialsDto,
+  ChangePasswordDto,
   RefreshTokenDto,
+  RequestResetPasswordDto,
+  ResetPasswordDto,
   ResponseDto,
   SecretDataDto,
   UserDto,
 } from '../../shared/dto';
 import { UserEntity } from '../../persistence/entity';
+import { RolType } from '../../shared/enum';
+import { PermissionGuard, RolGuard } from '../guard';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -110,7 +116,74 @@ export class AuthController {
     type: ResponseDto,
   })
   @ApiResponse({ status: 500, description: 'Error interno del servidor.' })
-  activateAccount(@Query() activateUserDto: ActivateUserDto): Promise<void> {
+  activateAccount(
+    @Query() activateUserDto: ActivateUserDto,
+  ): Promise<ResponseDto> {
     return this.authService.activateUser(activateUserDto);
+  }
+
+  @Post('/request-reset-password')
+  @ApiOperation({
+    summary:
+      'Enviar correo de recuperación de contraseña de la cuenta de usuario',
+  })
+  @ApiBody({
+    description: 'Estructura para enviar el correo de recuperación.',
+    type: RequestResetPasswordDto,
+  })
+  @ApiResponse({
+    status: 200,
+    description:
+      'Envia un correo de recuperación de la contraseña de la cuenta de un usuario',
+    type: ResponseDto,
+  })
+  @ApiResponse({ status: 500, description: 'Error interno del servidor.' })
+  requestResetPassword(
+    @Body() requestResetPasswordDto: RequestResetPasswordDto,
+  ): Promise<ResponseDto> {
+    return this.authService.requestResetPasword(requestResetPasswordDto);
+  }
+
+  @Patch('/reset-password')
+  @ApiOperation({ summary: 'Recuperar contraseña de la cuenta de usuario' })
+  @ApiBody({
+    description: 'Estructura para recuperar la contra.',
+    type: ResetPasswordDto,
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Recupera la contraseña de la cuenta de un usuario',
+    type: ResponseDto,
+  })
+  @ApiResponse({ status: 500, description: 'Error interno del servidor.' })
+  resetPassword(
+    @Body() resetPasswordDto: ResetPasswordDto,
+  ): Promise<ResponseDto> {
+    return this.authService.resetPasword(resetPasswordDto);
+  }
+
+  @Patch('/:id/change/password')
+  @Roles(RolType.USUARIO)
+  @UseGuards(AuthGuard('jwt'), RolGuard, PermissionGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Cambiar password a un usuario' })
+  @ApiBody({
+    description: 'Estructura para cambiar el password del usuario.',
+    type: ChangePasswordDto,
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Cambia el password de un usuario',
+    type: ResponseDto,
+  })
+  @ApiResponse({ status: 401, description: 'Sin autorizacion.' })
+  @ApiResponse({ status: 403, description: 'Sin autorizacion al recurso.' })
+  @ApiResponse({ status: 500, description: 'Error interno del servidor.' })
+  async changePassword(
+    @GetUser() user: UserEntity,
+    @Param('id') id: string,
+    @Body() changePasswordDto: ChangePasswordDto,
+  ): Promise<ResponseDto> {
+    return await this.authService.changePassword(user, id, changePasswordDto);
   }
 }

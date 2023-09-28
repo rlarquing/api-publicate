@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsUUID } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsUUID } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class ActivateUserDto {
@@ -11,9 +11,10 @@ export class ActivateUserDto {
   id: string;
 
   @IsNotEmpty()
+  @IsNumber({}, { message: 'El atributo code debe ser un número' })
   @ApiProperty({
     description: 'Code',
-    example: '',
+    example: 456123,
   })
   code: number;
 }

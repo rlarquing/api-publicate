@@ -32,6 +32,8 @@ import { IPaginationOptions, Pagination } from 'nestjs-typeorm-paginate';
 import { DeleteResult } from 'typeorm';
 import { AppConfig } from '../../app.keys';
 import { ConfigService } from '@nestjs/config';
+import * as process from 'process';
+import { Interval } from '@nestjs/schedule';
 
 @Injectable()
 export class UserService {
@@ -321,5 +323,20 @@ export class UserService {
       }
     }
     return await this.userRepository.remove(ids);
+  }
+  @Interval(86400000)
+  async removeCountWithOutActivation(): Promise<void> {
+    const user: UserEntity[] =
+      await this.userRepository.getUsersInactiveFor24Hours();
+    await this.userRepository.remove(user.map((item: UserEntity) => item.id));
+  }
+  @Interval(86400000)
+  async setNullResetPaswordCode(): Promise<void> {
+    const users: UserEntity[] =
+      await this.userRepository.getResetPaswordCodeFor24Hours();
+    for (const user of users) {
+      user.resetPasswordCode = null;
+      await this.userRepository.update(user);
+    }
   }
 }

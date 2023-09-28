@@ -1,5 +1,6 @@
 import {
   Injectable,
+  NotFoundException,
   UnauthorizedException,
   UnprocessableEntityException,
 } from '@nestjs/common';
@@ -19,8 +20,11 @@ import {
 import {
   ActivateUserDto,
   AuthCredentialsDto,
+  ChangePasswordDto,
   ReadFunctionDto,
   ReadMenuDto,
+  RequestResetPasswordDto,
+  ResetPasswordDto,
   ResponseDto,
   SecretDataDto,
   UserDto,
@@ -37,10 +41,16 @@ import { eliminarDuplicado } from '../../../lib';
 import { IJwtPayload } from '../../shared/interface';
 import { FunctionMapper, MenuMapper } from '../mapper';
 import { MailService } from '../../mail/mail.service';
+import { HISTORY_ACTION } from '../../persistence/entity/log-history.entity';
+import { AppConfig } from '../../app.keys';
+import { ConfigService } from '@nestjs/config';
+import { LogHistoryService } from './log-history.service';
 
 @Injectable()
 export class AuthService {
+  private isProductionEnv;
   constructor(
+    private configService: ConfigService,
     private userRepository: UserRepository,
     private rolRepository: RolRepository,
     private funcionRepository: FunctionRepository,
@@ -52,7 +62,11 @@ export class AuthService {
     private planRepository: PlanRepository,
     private provinceRepository: ProvinceRepository,
     private municipalityRepository: MunicipalityRepository,
-  ) {}
+    private logHistoryService: LogHistoryService,
+  ) {
+    this.isProductionEnv =
+      this.configService.get(AppConfig.NODE_ENV) === 'production';
+  }
   async signUp(userDto: UserDto): Promise<ResponseDto> {
     const result = new ResponseDto();
     const {
@@ -93,6 +107,7 @@ export class AuthService {
       result.successStatus = false;
       return result;
     }
+    await this.mailService.sendUserConfirmation(userEntity);
     return result;
   }
   async signIn(authCredentialsDto: AuthCredentialsDto): Promise<SecretDataDto> {
@@ -132,7 +147,6 @@ export class AuthService {
     const payload: IJwtPayload = { username };
     const accessToken = this.jwtService.sign(payload);
     const refreshToken = await this.getRefreshToken(user.id);
-    // await this.mailService.sendUserConfirmation(user);
     return {
       accessToken,
       refreshToken,
@@ -199,7 +213,8 @@ export class AuthService {
     return result;
   }
 
-  async activateUser(activateUserDto: ActivateUserDto): Promise<void> {
+  async activateUser(activateUserDto: ActivateUserDto): Promise<ResponseDto> {
+    const response = new ResponseDto();
     const { id, code } = activateUserDto;
     const user: UserEntity =
       await this.userRepository.findOneInactiveByIdAndCodeActivation(id, code);
@@ -209,7 +224,72 @@ export class AuthService {
         'La cuenta del usuario no se pudo activar',
       );
     }
-
     await this.userRepository.activateUser(user);
+    response.successStatus = true;
+    response.message = 'Se ha activado su cuenta de usuario.';
+    return response;
+  }
+
+  async requestResetPasword(
+    requestResetPasswordDto: RequestResetPasswordDto,
+  ): Promise<ResponseDto> {
+    const { email } = requestResetPasswordDto;
+    const user: UserEntity = await this.userRepository.findOneByEmail(email);
+    user.resetPasswordCode = Math.round(Math.random() * 999999);
+    const response = await this.userRepository.update(user);
+    if (response.successStatus) {
+      response.message = `Enviado el código al correo: ${email}`;
+    }
+    await this.mailService.sendRequestResetPassword(user);
+    return response;
+  }
+
+  async resetPasword(resetPasswordDto: ResetPasswordDto): Promise<ResponseDto> {
+    const { resetPasswordCode, password } = resetPasswordDto;
+    const user: UserEntity =
+      await this.userRepository.findOneByResetPasswordCode(resetPasswordCode);
+    user.password = await AuthService.hashPassword(password, user.salt);
+    user.resetPasswordCode = null;
+    const response = await this.userRepository.update(user);
+    if (response.successStatus) {
+      response.message = `Se ha cambiado su contraseña.`;
+    }
+    return response;
+  }
+
+  async changePassword(
+    user: UserEntity,
+    id: string,
+    changePasswordDto: ChangePasswordDto,
+  ): Promise<ResponseDto> {
+    const result = new ResponseDto();
+    const foundUser: UserEntity = await this.userRepository.findById(id);
+    if (!foundUser) {
+      throw new NotFoundException('No existe el user');
+    }
+    try {
+      const { password } = changePasswordDto;
+      foundUser.password = await AuthService.hashPassword(
+        password,
+        foundUser.salt,
+      );
+      await this.userRepository.update(foundUser);
+      delete foundUser.salt;
+      delete foundUser.password;
+      if (this.isProductionEnv) {
+        await this.logHistoryService.create(
+          user,
+          foundUser,
+          HISTORY_ACTION.MOD,
+        );
+      }
+      result.successStatus = true;
+      result.message = 'success';
+    } catch (error) {
+      result.message = error.response;
+      result.successStatus = false;
+      return result;
+    }
+    return result;
   }
 }

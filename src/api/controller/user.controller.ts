@@ -315,7 +315,6 @@ export class UserController {
     @Param('id') id: string,
     @Body() changePasswordDto: ChangePasswordDto,
   ): Promise<ResponseDto> {
-    console.log('entre');
     return await this.userService.changePassword(user, id, changePasswordDto);
   }
 

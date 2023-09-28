@@ -98,6 +98,13 @@ export class UserEntity extends GenericEntity {
   })
   codeActivation?: number;
 
+  @Column({
+    type: 'int4',
+    name: 'reset_password_code',
+    nullable: true,
+  })
+  resetPasswordCode?: number;
+
   @OneToMany(() => ClientEntity, (client) => client.user)
   clients: ClientEntity[];
   constructor(

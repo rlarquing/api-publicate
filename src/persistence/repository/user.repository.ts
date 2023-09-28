@@ -14,6 +14,7 @@ import {
   FindOptionsWhere,
   ILike,
   In,
+  LessThanOrEqual,
   MoreThanOrEqual,
   Repository,
 } from 'typeorm';
@@ -303,7 +304,18 @@ export class UserRepository {
 
   async activateUser(user: UserEntity): Promise<void> {
     user.active = true;
+    user.codeActivation = null;
     await this.userRepository.save(user);
+  }
+
+  async findOneByEmail(email: string): Promise<UserEntity> {
+    const user: UserEntity = await this.userRepository.findOne({
+      where: { email: email, active: true },
+    });
+    if (!user) {
+      throw new NotFoundException(`Usuario con el email no se encuentra`);
+    }
+    return user;
   }
 
   async findOneInactiveByIdAndCodeActivation(
@@ -313,5 +325,33 @@ export class UserRepository {
     return this.userRepository.findOne({
       where: { id: id, codeActivation: code, active: false },
     } as FindOneOptions);
+  }
+
+  async findOneByResetPasswordCode(
+    resetPasswordCode: number,
+  ): Promise<UserEntity> {
+    const user: UserEntity = await this.userRepository.findOne({
+      where: { resetPasswordCode: resetPasswordCode, active: true },
+    });
+    if (!user) {
+      throw new NotFoundException(`Usuario no se encuentra`);
+    }
+    return user;
+  }
+
+  async getUsersInactiveFor24Hours(): Promise<UserEntity[]> {
+    const twentyFourHoursAgo = new Date();
+    twentyFourHoursAgo.setHours(twentyFourHoursAgo.getHours() - 24);
+    return await this.userRepository.find({
+      where: { active: false, createdAt: LessThanOrEqual(twentyFourHoursAgo) },
+    });
+  }
+
+  async getResetPaswordCodeFor24Hours(): Promise<UserEntity[]> {
+    const twentyFourHoursAgo = new Date();
+    twentyFourHoursAgo.setHours(twentyFourHoursAgo.getHours() - 24);
+    return await this.userRepository.find({
+      where: { active: true, updatedAt: LessThanOrEqual(twentyFourHoursAgo) },
+    });
   }
 }
