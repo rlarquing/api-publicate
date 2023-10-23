@@ -1,8 +1,15 @@
 import { IsString, Matches, MaxLength, MinLength } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsEqualTo } from '../../api/decorator';
 
 export class ChangePasswordDto {
+  @IsString()
+  @ApiPropertyOptional({
+    description: 'Contraseña del usuario.',
+    example: 'Qwerty1234*',
+  })
+  oldPassword?: string;
+
   @IsString()
   @MinLength(8, {
     message: 'La contraseña debe tener al menos 8 carácteres.',

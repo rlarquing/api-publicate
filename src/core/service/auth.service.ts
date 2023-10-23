@@ -259,20 +259,29 @@ export class AuthService {
 
   async changePassword(
     user: UserEntity,
-    id: string,
     changePasswordDto: ChangePasswordDto,
   ): Promise<ResponseDto> {
     const result = new ResponseDto();
-    const foundUser: UserEntity = await this.userRepository.findById(id);
+    const foundUser: UserEntity = await this.userRepository.findById(user.id);
     if (!foundUser) {
       throw new NotFoundException('No existe el user');
     }
-    try {
-      const { password } = changePasswordDto;
+
+    let { password, oldPassword } = changePasswordDto;
+    password = await AuthService.hashPassword(password, foundUser.salt);
+    oldPassword = await AuthService.hashPassword(oldPassword, foundUser.salt);
+
+    if (oldPassword === user.password) {
       foundUser.password = await AuthService.hashPassword(
         password,
         foundUser.salt,
       );
+    } else {
+      result.message = 'La contraseña anterior no coincide.';
+      result.successStatus = false;
+      return result;
+    }
+    try {
       await this.userRepository.update(foundUser);
       delete foundUser.salt;
       delete foundUser.password;

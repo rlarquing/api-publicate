@@ -7,7 +7,6 @@ import {
   Get,
   Query,
   Patch,
-  Param,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -75,7 +74,7 @@ export class AuthController {
     return await this.authService.signIn(authCredentialsDto);
   }
 
-  @Post('/refresh-tokens')
+  @Post('/refresh/tokens')
   @ApiOperation({ summary: 'Obtener el token nuevo para los usuarios' })
   @ApiResponse({
     status: 200,
@@ -108,7 +107,7 @@ export class AuthController {
     return await this.authService.logout(user);
   }
 
-  @Get('/activate-account')
+  @Get('/activate/account')
   @ApiOperation({ summary: 'Activar cuenta de usuario' })
   @ApiResponse({
     status: 200,
@@ -122,7 +121,7 @@ export class AuthController {
     return this.authService.activateUser(activateUserDto);
   }
 
-  @Post('/request-reset-password')
+  @Patch('/request/reset/password')
   @ApiOperation({
     summary:
       'Enviar correo de recuperación de contraseña de la cuenta de usuario',
@@ -144,7 +143,7 @@ export class AuthController {
     return this.authService.requestResetPasword(requestResetPasswordDto);
   }
 
-  @Patch('/reset-password')
+  @Patch('/reset/password')
   @ApiOperation({ summary: 'Recuperar contraseña de la cuenta de usuario' })
   @ApiBody({
     description: 'Estructura para recuperar la contra.',
@@ -162,7 +161,7 @@ export class AuthController {
     return this.authService.resetPasword(resetPasswordDto);
   }
 
-  @Patch('/:id/change/password')
+  @Patch('/change/password')
   @Roles(RolType.USUARIO)
   @UseGuards(AuthGuard('jwt'), RolGuard, PermissionGuard)
   @ApiBearerAuth()
@@ -181,9 +180,8 @@ export class AuthController {
   @ApiResponse({ status: 500, description: 'Error interno del servidor.' })
   async changePassword(
     @GetUser() user: UserEntity,
-    @Param('id') id: string,
     @Body() changePasswordDto: ChangePasswordDto,
   ): Promise<ResponseDto> {
-    return await this.authService.changePassword(user, id, changePasswordDto);
+    return await this.authService.changePassword(user, changePasswordDto);
   }
 }
